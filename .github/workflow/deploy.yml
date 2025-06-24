@@ -1,0 +1,35 @@
+name: Fullstack App CI/CD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v3
+
+    - name: 🔧 Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: 📦 Install backend dependencies
+      run: |
+        cd backend
+        npm install
+
+    - name: 🧱 Build frontend
+      run: |
+        cd frontend
+        npm install
+        npm run build
+        cp -r build ../backend/public
+
+    - name: ✅ Run backend (example)
+      run: |
+        cd backend
+        node server.js
